@@ -4,7 +4,7 @@ import { useState } from "react";
 
 async function getData(city: string) {
   const res = await fetch(
-    `http://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no&alerts=no`
+    `https://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no&alerts=no`
   );
 
   if (!res.ok) {

@@ -52,7 +52,7 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">Tomorrow's Weather Forecast</h2>
+          <h2 className="text-xl font-semibold mb-2">Tomorrow&#39;s Weather Forecast</h2>
           {weatherData.forecast && weatherData.forecast.forecastday.length > 1 && (
             <div className="bg-gray-200 p-4 rounded-md">
               <h3 className="text-lg font-semibold mb-2">{weatherData.forecast.forecastday[1].date}</h3>

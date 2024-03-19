@@ -29,12 +29,12 @@ export default function Page() {
   return (
 <main className="min-h-screen bg-gray-100 py-8 px-4">
   <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-    <h1 className="text-3xl font-semibold mb-4">Search a city and check the weather</h1>
+    <h1 className="text-3xl font-semibold mb-4 text-slate-500">Enter a city to get the weather!</h1>
     <div className="flex items-center mb-4">
       <input
         type="text"
         placeholder="Enter city"
-        className="border border-gray-300 rounded-l-md px-4 py-2 w-full"
+        className="border border-gray-300 rounded-l-md px-4 py-2 w-full text-slate-500"
         value={city}
         onChange={(e) => setCity(e.target.value)}
       />
@@ -42,26 +42,26 @@ export default function Page() {
     </div>
     {weatherData && (
       <div>
-        <h2 className="text-xl font-semibold mb-4">Current Weather in {weatherData.location.name}, {weatherData.location.country}</h2>
-        <div className="bg-gray-200 p-4 rounded-md mb-4 flex items-center">
+        <h2 className="text-xl font-semibold mb-4 text-slate-500">Current Weather in {weatherData.location.name}, {weatherData.location.country}</h2>
+        <div className="bg-gray-200 p-4 rounded-md mb-4 flex items-center text-slate-500">
           <img src={`http:${weatherData.current.condition.icon}`} alt={weatherData.current.condition.text} className="w-12 h-12 mr-4" />
           <div>
 
-            <p className="text-lg">Temperature: {weatherData.current.temp_c}°C {weatherData.current.temp_c > 7 ? '😎' : weatherData.current.temp_c < 7 && '🥶'}</p>
-            <p className="text-lg">Condition: {weatherData.current.condition.text}</p>
+            <p className="text-lg text-slate-500">Temperature: {weatherData.current.temp_c}° {weatherData.current.temp_c > 7 ? '😎' : weatherData.current.temp_c < 7 && '🥶'}</p>
+            <p className="text-lg text-slate-500">Condition: {weatherData.current.condition.text}</p>
           </div>
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">Tomorrow&#39;s Weather Forecast</h2>
+          <h2 className="text-xl font-semibold mb-2 text-slate-500">Tomorrow&#39;s Weather Forecast</h2>
           {weatherData.forecast && weatherData.forecast.forecastday.length > 1 && (
             <div className="bg-gray-200 p-4 rounded-md">
-              <h3 className="text-lg font-semibold mb-2">{weatherData.forecast.forecastday[1].date}</h3>
+              <h3 className="text-lg font-semibold mb-2 text-slate-500">{weatherData.forecast.forecastday[1].date}</h3>
               <div className="flex items-center">
                 <img src={`http:${weatherData.forecast.forecastday[1].day.condition.icon}`} alt={weatherData.forecast.forecastday[1].day.condition.text} className="w-10 h-10 mr-4" />
                 <div>
-                  <p className="text-lg">Max Temperature: {weatherData.forecast.forecastday[1].day.maxtemp_c}°C {weatherData.forecast.forecastday[1].day.maxtemp_c > 7 ? '😎' : weatherData.forecast.forecastday[1].day.maxtemp_c < 7 && '🥶'}</p>
-                  <p className="text-lg">Min Temperature: {weatherData.forecast.forecastday[1].day.mintemp_c}°C {weatherData.forecast.forecastday[1].day.mintemp_c > 7 ? '😎' : weatherData.forecast.forecastday[1].day.mintemp_c < 7 && '🥶'}</p>
-                  <p className="text-lg">Weather: {weatherData.forecast.forecastday[1].day.condition.text}</p>
+                  <p className="text-lg text-slate-500">Max Temperature: {weatherData.forecast.forecastday[1].day.maxtemp_c}° {weatherData.forecast.forecastday[1].day.maxtemp_c > 7 ? '😎' : weatherData.forecast.forecastday[1].day.maxtemp_c < 7 && '🥶'}</p>
+                  <p className="text-lg text-slate-500">Min Temperature: {weatherData.forecast.forecastday[1].day.mintemp_c}° {weatherData.forecast.forecastday[1].day.mintemp_c > 7 ? '😎' : weatherData.forecast.forecastday[1].day.mintemp_c < 7 && '🥶'}</p>
+                  <p className="text-lg text-slate-500">Weather: {weatherData.forecast.forecastday[1].day.condition.text}</p>
                 </div>
               </div>
             </div>

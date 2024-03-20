@@ -3,6 +3,7 @@ import Fetch from "./components/Fetch";
 import AddCheck from "./add-fetch/page";
 
 const prisma = new PrismaClient();
+export const revalidate = 1; 
 
 async function getFetches() {
   const weatherChecks = await prisma.weatherCheck.findMany({

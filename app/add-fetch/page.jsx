@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+export const dynamic = 'force-dynamic';
 export default function AddCheck() {
   const [city, setCity] = useState("");
   const [error, setError] = useState(null);

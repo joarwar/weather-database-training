@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Weather application",
-  description: "Weather application by Joar Warholm",
+  title: "Weather app",
+  description: "Weather app by Joar",
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-red-500">{children}</body>
+      <body >{children}</body>
     </html>
   );
 }

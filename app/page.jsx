@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import Fetch from "./components/Fetch";
 import AddCheck from "./add-fetch/page";
+
 const prisma = new PrismaClient();
 
 async function getFetches() {

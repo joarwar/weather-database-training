@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.tsx", "lib/prisma.js", "app/components/Fetch.jsx", "app/add-fetch/page.jsx", "app/layout.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.jsx", "lib/prisma.js", "app/components/Fetch.jsx", "app/add-fetch/page.jsx", "app/layout.jsx"],
   "exclude": ["node_modules"]
 }

@@ -1,76 +1,98 @@
-'use client'
-import Link from "next/link";
+"use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AddCheck() {
   const [city, setCity] = useState("");
-  const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
-
+  const router = useRouter()
+  //const API_KEY = process.env.API_KEY;
+  //console.log(process.env)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const weatherResponse = await fetch(
-        // need to fix api key
-        `https://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no`
-      );
+      // Perform a GET request to fetch weather data
+      // Horrible to put key here will fix later
+      const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no`);
       if (!weatherResponse.ok) {
-        throw new Error("Failed to fetch weather data");
+        throw new Error(
+          "Failed to fetch city weather. Please check the spelling."
+        );
       }
       const weatherData = await weatherResponse.json();
-      setWeatherData(weatherData);
-      
+      //console.log(weatherData);
+      let currentTemp = weatherData.current.temp_c;
+      let tomorrowMin = weatherData.forecast.forecastday[1].day.mintemp_c;
+      let tomorrowMax = weatherData.forecast.forecastday[1].day.maxtemp_c;
+      let tomorrowWeather =
+        weatherData.forecast.forecastday[1].day.condition.text;
 
-      await fetch("/api/add-fetch", {
+      let currentTempAsString = String(currentTemp);
+      let tomorrowDate = weatherData.forecast.forecastday[1].date;
+      let tomorrowMinAsString = String(tomorrowMin);
+      let tomorrowMaxAsString = String(tomorrowMax);
+      let tomorrowWeatherAsString = String(tomorrowWeather);
+      let tomorrowDateAsString = String(tomorrowDate);
+
+      // Perform a POST request to add city data
+      const addResponse = await fetch("/api/add-fetch", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Method": "POST"
         },
         body: JSON.stringify({
           city: weatherData.location.name,
           country: weatherData.location.country,
-          currentTemp: weatherData.current.temp_c,
+          currentTemp: currentTempAsString,
           currentWeather: weatherData.current.condition.text,
           currentDate: weatherData.location.localtime,
-          createdAt: new Date().toISOString(),
-          tomorrowMin: weatherData.forecast.forecastday[0].day.mintemp_c,
-          tomorrowMax: weatherData.forecast.forecastday[0].day.maxtemp_c,
-          tomorrowWeather: weatherData.forecast.forecastday[0].day.condition.text,
-          tomorrowDate: weatherData.forecast.forecastday[0].date,
+          currentIcon: weatherData.forecast.forecastday[0].day.condition.icon,
+          createdAt: new Date().toISOString(), // Assuming you want the current date and time
+          tomorrowMin: tomorrowMinAsString,
+          tomorrowMax: tomorrowMaxAsString,
+          tomorrowWeather: tomorrowWeatherAsString,
+          tomorrowDate: tomorrowDateAsString,
+          tomorrowIcon: weatherData.forecast.forecastday[1].day.condition.icon,
         }),
       });
-
+      if (!addResponse.ok) {
+        throw new Error("Failed to add city");
+      }
+      router.refresh()
       setError(null);
     } catch (error) {
       console.error("Error:", error);
       setError(error.message);
     }
   };
-
   const handleChange = (event) => {
     setCity(event.target.value);
   };
 
   return (
     <main>
-      <h1>Check Weather</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="flex items-center">
+      <div className="flex flex-col items-center">
+        <h1 className="text-2xl font-bold mb-4">Check Weather</h1>
+        <form onSubmit={handleSubmit} className="mb-4 flex items-center">
           <input
             type="text"
             id="city"
             value={city}
             onChange={handleChange}
-            required
+            className="px-4 py-2 mr-2 rounded border focus:outline-none focus:ring focus:border-blue-300"
+            placeholder="Enter city"
           />
-          <button type="submit">Submit</button>
-        </div>
-      </form>
-      {error && <p>{error}</p>}
-      {/* Display weatherData here if needed */}
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded"
+          >
+            Submit
+          </button>
+        </form>
+        {error && <p className="text-red-500">{error}</p>}
+      </div>
     </main>
   );
 }

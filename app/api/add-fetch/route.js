@@ -18,20 +18,6 @@ export async function POST(request) {
       tomorrowDate,
       tomorrowIcon,
     } = await request.json();
-    console.log({
-      city,
-      country,
-      currentTemp,
-      currentWeather,
-      currentDate,
-      currentIcon,
-      createdAt,
-      tomorrowMin,
-      tomorrowMax,
-      tomorrowWeather,
-      tomorrowDate,
-      tomorrowIcon,
-    });
 
     const result = await prisma.WeatherCheck.create({
       data: {

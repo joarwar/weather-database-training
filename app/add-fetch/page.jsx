@@ -16,8 +16,8 @@ export default function AddCheck() {
 
     try {
       // Perform a GET request to fetch weather data
-      // Horrible to put key here will fix later
-      const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no`);
+
+      const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key={KEY}&q=${city}&days=2&aqi=no`);
       if (!weatherResponse.ok) {
         throw new Error(
           "Failed to fetch city weather. Please check the spelling."

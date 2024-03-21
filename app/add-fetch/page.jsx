@@ -1,29 +1,23 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { wobble } from "ldrs";
-
-// Default values shown
-
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 export default function AddCheck() {
   const [city, setCity] = useState("");
   const [error, setError] = useState(null);
-  const router = useRouter();
+  const router = useRouter()
   const [buttonPressed, setButtonPressed] = useState(false);
   //const API_KEY = process.env.API_KEY;
   //console.log(process.env)
-  wobble.register();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setButtonPressed(true);
+
     try {
       // Perform a GET request to fetch weather data
       // Horrible to put key here will fix later
-      const weatherResponse = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no`
-      );
+      const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no`);
       if (!weatherResponse.ok) {
         throw new Error(
           "Failed to fetch city weather. Please check the spelling."
@@ -68,10 +62,9 @@ export default function AddCheck() {
       if (!addResponse.ok) {
         throw new Error("Failed to add city");
       }
-      setButtonPressed(true);
-      router.refresh();
-      setError(null);
+      router.refresh()
       setButtonPressed(false);
+      setError(null);
     } catch (error) {
       console.error("Error:", error);
       setError(error.message);
@@ -84,9 +77,7 @@ export default function AddCheck() {
   return (
     <main>
       <div className="flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-4">
-          Enter a city to check the weather!
-        </h1>
+        <h1 className="text-2xl font-bold mb-4">Enter a city to check the weather!</h1>
         <form onSubmit={handleSubmit} className="mb-4 flex items-center">
           <input
             type="text"
@@ -106,7 +97,8 @@ export default function AddCheck() {
         {error ? (
         <p className="text-red-500">{error}</p>
       ) : buttonPressed && (
-        <l-wobble size="45" speed="0.8" color="black"></l-wobble>
+        <img src="transparent-loading.gif" alt="Loading..." className="w-10 h-10"/>
+
       )}
       </div>
     </main>

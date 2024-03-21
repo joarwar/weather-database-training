@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { wobble } from "ldrs";
 
+// Default values shown
 
 export const dynamic = "force-dynamic";
 export default function AddCheck() {
@@ -11,11 +13,11 @@ export default function AddCheck() {
   const [buttonPressed, setButtonPressed] = useState(false);
   //const API_KEY = process.env.API_KEY;
   //console.log(process.env)
-  bouncy.register();
+  wobble.register();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setButtonPressed(true);
     try {
       // Perform a GET request to fetch weather data
       // Horrible to put key here will fix later
@@ -29,7 +31,6 @@ export default function AddCheck() {
       }
       const weatherData = await weatherResponse.json();
       //console.log(weatherData);
-      setButtonPressed(true);
       let currentTemp = weatherData.current.temp_c;
       let tomorrowMin = weatherData.forecast.forecastday[1].day.mintemp_c;
       let tomorrowMax = weatherData.forecast.forecastday[1].day.maxtemp_c;
@@ -67,6 +68,7 @@ export default function AddCheck() {
       if (!addResponse.ok) {
         throw new Error("Failed to add city");
       }
+      setButtonPressed(true);
       router.refresh();
       setError(null);
       setButtonPressed(false);
@@ -102,14 +104,11 @@ export default function AddCheck() {
           </button>
         </form>
         {error ? (
-          <p className="text-red-500">{error}</p>
-        ) : (
-          buttonPressed && (
-            <l-bouncy size="45" speed="1.75" color="black"></l-bouncy>
-          )
-        )}
+        <p className="text-red-500">{error}</p>
+      ) : buttonPressed && (
+        <l-wobble size="45" speed="0.8" color="black"></l-wobble>
+      )}
       </div>
     </main>
   );
 }
-import { bouncy } from "ldrs";

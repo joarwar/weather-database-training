@@ -74,7 +74,7 @@ export default function AddCheck() {
   return (
     <main>
       <div className="flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-4">Check Weather</h1>
+        <h1 className="text-2xl font-bold mb-4">Enter a city to check the weather!</h1>
         <form onSubmit={handleSubmit} className="mb-4 flex items-center">
           <input
             type="text"
@@ -88,7 +88,7 @@ export default function AddCheck() {
             type="submit"
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded"
           >
-            Submit
+            Search
           </button>
         </form>
         {error && <p className="text-red-500">{error}</p>}

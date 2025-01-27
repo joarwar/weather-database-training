@@ -5,6 +5,7 @@ import AddCheck from "./add-fetch/page";
 const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
 
+
 async function getFetches() {
   const weatherChecks = await prisma.weatherCheck.findMany({
     orderBy: { createdAt: "desc" },

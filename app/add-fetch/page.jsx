@@ -8,7 +8,7 @@ export default function AddCheck() {
   const router = useRouter()
   const [buttonPressed, setButtonPressed] = useState(false);
   const API_KEY = process.env.API_KEY;
-  console.log("API Key:", process.env.API_KEY);
+  console.log("API Key:", process.env.NEXT_PUBLIC_API_KEY);
 
 
 
@@ -18,7 +18,7 @@ export default function AddCheck() {
 
     try {
       // Perform a GET request to fetch weather data
-      const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${process.env.API_KEY}&q=${city}&days=2&aqi=no`);
+      const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_API_KEY}&q=${city}&days=2&aqi=no`);
       if (!weatherResponse.ok) {
         throw new Error(
           "Failed to fetch city weather. Please check the spelling."

@@ -15,7 +15,7 @@ export default function AddCheck() {
 
     try {
       const weatherResponse = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=0a9b864a33dc410d9a5173252241703&q=${city}&days=2&aqi=no`
+        `https://api.weatherapi.com/v1/forecast.json?key=c7f8afe1a95f4553b30134752242709&q=${city}&days=2&aqi=no`
       );
 
       if (!weatherResponse.ok) {

@@ -1,16 +1,59 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-export const dynamic = 'force-dynamic';
+import mqtt from "mqtt"; // Import MQTT library
+
+export const dynamic = "force-dynamic";
+
 export default function AddCheck() {
   const [city, setCity] = useState("");
   const [error, setError] = useState(null);
-  const router = useRouter()
+  const router = useRouter();
   const [buttonPressed, setButtonPressed] = useState(false);
-  const API_KEY = process.env.API_KEY;
-  console.log("API Key:", process.env.NEXT_PUBLIC_API_KEY);
 
+  // MQTT states for wind speed and temperature
+  const [windSpeed, setWindSpeed] = useState(0);
+  const [temperature, setTemperature] = useState(0);
 
+  const mqttBroker = "wss://broker.hivemq.com:8000/mqtt"; // WebSocket MQTT broker
+  const mqttTopicWind = "yrgo_ei23/vind_ms/grupp1";
+  const mqttTopicTemp = "yrgo_ei23/temp_degC/grupp1";
+
+  useEffect(() => {
+    // Connect to MQTT broker
+    const client = mqtt.connect(mqttBroker);
+
+    client.on("connect", () => {
+      console.log("Connected to MQTT broker");
+
+      // Subscribe to topics
+      client.subscribe(mqttTopicWind, (err) => {
+        if (err) console.error("Failed to subscribe to wind topic", err);
+      });
+
+      client.subscribe(mqttTopicTemp, (err) => {
+        if (err) console.error("Failed to subscribe to temperature topic", err);
+      });
+    });
+
+    client.on("message", (topic, message) => {
+      // Update state based on the received topic
+      if (topic === mqttTopicWind) {
+        setWindSpeed(parseFloat(message.toString()));
+      } else if (topic === mqttTopicTemp) {
+        setTemperature(parseFloat(message.toString()));
+      }
+    });
+
+    client.on("error", (err) => {
+      console.error("MQTT connection error:", err);
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      client.end();
+    };
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,14 +61,16 @@ export default function AddCheck() {
 
     try {
       // Perform a GET request to fetch weather data
-      const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_API_KEY}&q=${city}&days=2&aqi=no`);
+      const weatherResponse = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_API_KEY}&q=${city}&days=2&aqi=no`
+      );
       if (!weatherResponse.ok) {
         throw new Error(
           "Failed to fetch city weather. Please check the spelling."
         );
       }
       const weatherData = await weatherResponse.json();
-      //console.log(weatherData);
+
       let currentTemp = weatherData.current.temp_c;
       let tomorrowMin = weatherData.forecast.forecastday[1].day.mintemp_c;
       let tomorrowMax = weatherData.forecast.forecastday[1].day.maxtemp_c;
@@ -52,7 +97,7 @@ export default function AddCheck() {
           currentWeather: weatherData.current.condition.text,
           currentDate: weatherData.location.localtime,
           currentIcon: weatherData.forecast.forecastday[0].day.condition.icon,
-          createdAt: new Date().toISOString(), 
+          createdAt: new Date().toISOString(),
           tomorrowMin: tomorrowMinAsString,
           tomorrowMax: tomorrowMaxAsString,
           tomorrowWeather: tomorrowWeatherAsString,
@@ -63,7 +108,8 @@ export default function AddCheck() {
       if (!addResponse.ok) {
         throw new Error("Failed to add city");
       }
-      router.refresh()
+
+      router.refresh();
       setButtonPressed(false);
       setError(null);
     } catch (error) {
@@ -71,6 +117,7 @@ export default function AddCheck() {
       setError(error.message);
     }
   };
+
   const handleChange = (event) => {
     setCity(event.target.value);
   };
@@ -78,7 +125,9 @@ export default function AddCheck() {
   return (
     <main>
       <div className="flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-4 text-slate-400">Enter a city to check the weather!</h1>
+        <h1 className="text-2xl font-bold mb-4 text-slate-400">
+          Enter a city to check the weather!
+        </h1>
         <form onSubmit={handleSubmit} className="mb-4 flex items-center">
           <input
             type="text"
@@ -96,11 +145,29 @@ export default function AddCheck() {
           </button>
         </form>
         {error ? (
-        <p className="text-red-500">{error}</p>
-      ) : buttonPressed && (
-        <img src="transparent-loading.gif" alt="Loading..." className="w-10 h-10"/>
+          <p className="text-red-500">{error}</p>
+        ) : (
+          buttonPressed && (
+            <img
+              src="transparent-loading.gif"
+              alt="Loading..."
+              className="w-10 h-10"
+            />
+          )
+        )}
+      </div>
 
-      )}
+      {/* Display MQTT data */}
+      <div className="mt-4 p-4 bg-blue-100 rounded shadow-md">
+        <h2 className="text-xl font-semibold text-slate-600">
+          Live Sensor Data:
+        </h2>
+        <p className="text-lg text-slate-700">
+          <strong>Wind Speed:</strong> {windSpeed} m/s
+        </p>
+        <p className="text-lg text-slate-700">
+          <strong>Temperature:</strong> {temperature} °C
+        </p>
       </div>
     </main>
   );
